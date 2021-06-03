@@ -5,6 +5,8 @@ const {
     model
 } = require('mongoose')
 
+const Profile = require('./Profile')
+
 let userSchema = new Schema({
     name: {
         type: String,
@@ -24,7 +26,7 @@ let userSchema = new Schema({
     profile: {
         //here type is a ObjectId of reference Schema  & ref is schema name which schema is linked here..
         type: Schema.Types.ObjectId,
-        ref: 'Profile'
+        ref: Profile
     }
 }, {
     timestamps: true
