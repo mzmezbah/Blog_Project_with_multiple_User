@@ -8,10 +8,10 @@ const {
 const Profile = require('./Profile')
 
 let userSchema = new Schema({
-    name: {
+    username: {
         type: String,
         trim: true,
-        maxlength: 30,
+        maxlength: 20,
         required: true
     },
     email: {
