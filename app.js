@@ -1,5 +1,12 @@
 const express = require('express')
 const morgan = require('morgan')
+const mongoose = require('mongoose')
+
+//import route
+
+const authRoute = require('./routes/authRoute')
+
+
 
 const app = express()
 
@@ -19,9 +26,11 @@ const middleware = [
 
 app.use(middleware)
 
+app.use('/auth', authRoute)
+
 app.get('/', (req, res) => {
 
-    res.render('pages/auth/signup', {title: 'Create a new account'})
+    // res.render('pages/auth/signup', {title: 'Create a new account'})
     res.json({
         message: 'Hello World!'
     })
@@ -29,6 +38,7 @@ app.get('/', (req, res) => {
 
 
 let PORT = process.env.PORT || 8080
+
 app.listen(PORT, ()=>{
     console.log(`server is running on PORT ${PORT}`)
 })
