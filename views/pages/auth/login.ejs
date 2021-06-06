@@ -1,0 +1,27 @@
+<%- include('../../partials/head.ejs') %>
+
+<div class="container my-container my-5">
+    <div class="col-md-6 offset-md-3">
+        <div class="card card-body">
+            <h4 class="mb-3">Create A New Account</h4>
+            <form action="/auth/login" method="post">
+                <div class="form-group my-2">
+                    <label for="email">Enter Your Valid Email</label>
+                    <input type="email" name="email" id="email" class="form-control"> 
+                </div>
+                <div class="form-group my-2">
+                    <label for="password">Enter Your Password</label>
+                    <input type="password" name="password" id="password" class="form-control">
+                </div>
+                <input type="submit" value="Login" class="btn btn-primary">
+            </form>
+            <a href="pages/auth/login" class=" my-3 text-center">Don't have any account? Signup Here</a>
+        </div>
+    </div>
+</div>
+
+<%- include('../../partials/footer.ejs') %>
+
+</body>
+
+</html>
