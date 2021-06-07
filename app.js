@@ -20,7 +20,9 @@ app.set('views', 'views')
 const middleware = [
     morgan('dev'),
     express.static('public'),
-    express.urlencoded({extended:true}),
+    express.urlencoded({
+        extended: true
+    }),
     express.json()
 ]
 
@@ -39,6 +41,15 @@ app.get('/', (req, res) => {
 
 let PORT = process.env.PORT || 8080
 
-app.listen(PORT, ()=>{
-    console.log(`server is running on PORT ${PORT}`)
-})
+mongoose.connect('mongodb+srv://mezbah:45406331@cluster0.pn01s.mongodb.net/EXP-Blog', {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
+    .then((result) => {
+        app.listen(PORT, () => {
+            console.log(`server is running on PORT ${PORT}`)
+        })
+    }).catch((err) => {
+        console.log(err)
+
+    });
