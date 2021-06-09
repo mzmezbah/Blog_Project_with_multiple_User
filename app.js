@@ -39,12 +39,12 @@ app.get('/', (req, res) => {
 })
 
 
-let PORT = process.env.PORT || 8080
+let PORT = process.env.PORT || 8080 
 
-mongoose.connect('mongodb+srv://mezbah:45406331@cluster0.pn01s.mongodb.net/EXP-Blog', {
+mongoose.connect('mongodb://localhost/EXP-Blog', {
         useNewUrlParser: true,
         useUnifiedTopology: true
-    })
+    })  
     .then((result) => {
         app.listen(PORT, () => {
             console.log(`server is running on PORT ${PORT}`)
