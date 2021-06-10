@@ -6,6 +6,8 @@ const mongoose = require('mongoose')
 
 const authRoute = require('./routes/authRoute')
 
+const validatorRoute = require('./playground/validator')//must be delete later
+
 
 
 const app = express()
@@ -28,11 +30,14 @@ const middleware = [
 
 app.use(middleware)
 
+
 app.use('/auth', authRoute)
+
+app.use('/playground', validatorRoute)//must be delete later
 
 app.get('/', (req, res) => {
 
-    // res.render('pages/auth/signup', {title: 'Create a new account'})
+    res.render('pages/auth/signup', {title: 'Create a new account'})
     res.json({
         message: 'Hello World!'
     })
