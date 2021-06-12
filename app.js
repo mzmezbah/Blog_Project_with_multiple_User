@@ -6,7 +6,7 @@ const mongoose = require('mongoose')
 
 const authRoute = require('./routes/authRoute')
 
-const validatorRoute = require('./playground/validator')//must be delete later
+// const validatorRoute = require('./playground/validator')//must be delete later bcz its for practice validator
 
 
 
@@ -33,7 +33,7 @@ app.use(middleware)
 
 app.use('/auth', authRoute)
 
-app.use('/playground', validatorRoute)//must be delete later
+// app.use('/playground', validatorRoute)//must be delete later its for practice validator
 
 app.get('/', (req, res) => {
 

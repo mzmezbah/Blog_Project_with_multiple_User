@@ -1,11 +1,17 @@
 const bcrypt = require('bcrypt')
 
 const User = require('../models/User')
+const {
+    validationResult
+} = require('express-validator')
+const formatter = require('../utils/validatorErrorFormatter')
 
 
 exports.signupGetController = (req, res, next) => {
     res.render('pages/auth/signup', {
-        title: 'Create A New Account'
+        title: 'Create A New Account',
+        error: {},
+        value: {}
     })
 }
 
@@ -17,6 +23,18 @@ exports.signupPostController = async (req, res, next) => {
         password
     } = req.body
 
+    let errors = validationResult(req).formatWith(formatter)
+    if (!errors.isEmpty()) {
+        return res.render('pages/auth/signup', {
+            title: 'Create A New Account',
+            error: errors.mapped(),
+            value: {
+                username,
+                email,
+                password
+            }
+        })
+    }
     try {
         let hashedPassword = await bcrypt.hash(password, 11)
 
@@ -30,7 +48,9 @@ exports.signupPostController = async (req, res, next) => {
 
         console.log('Account Create Successfully', createUser)
         res.render('pages/auth/signup', {
-            title: 'Create A New Account'
+            title: 'Create A New Account',
+            error: {},
+            value: {}
         })
 
     } catch (e) {
@@ -42,7 +62,8 @@ exports.signupPostController = async (req, res, next) => {
 
 exports.loginGetController = (req, res, next) => {
     res.render('pages/auth/login', {
-        title: 'Login to Your Account'
+        title: 'Login to Your Account',
+        error: {}
     })
 }
 
@@ -53,6 +74,15 @@ exports.loginPostController = async (req, res, next) => {
         password
     } = req.body
 
+    let errors = validationResult(req).formatWith(formatter)
+    if (!errors.isEmpty()) {
+        console.log(errors)
+        return res.render('pages/auth/login', {
+            title: 'LogIn to Your Account',
+            error: errors.mapped()
+        })
+    }
+    // console.log(errors)
     try {
         let user = await User.findOne({
             email
@@ -72,7 +102,8 @@ exports.loginPostController = async (req, res, next) => {
         }
         console.log('Successfully Logged In', user)
         res.render('pages/auth/login', {
-            title: 'Login Your Account'
+            title: 'Login Your Account',
+            error: {}
         })
     } catch (e) {
         console.log(e)
