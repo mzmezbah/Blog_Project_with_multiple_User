@@ -14,7 +14,7 @@
                 <div class="form-group my-2">
                     <label for="password">Enter Your Password</label>
                     <input type="password" name="password" id="password"
-                        class="form-control  <%= error.password ? 'is-invalid' : '' %>">
+                        class="form-control <%= error.password ? 'is-invalid' : '' %>">
                     <div class="invalid-feedback"> <%= error.password && error.password %> </div>
                 </div>
                 <input type="submit" value="Login" class="btn btn-primary">
