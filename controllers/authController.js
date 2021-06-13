@@ -5,6 +5,7 @@ const {
     validationResult
 } = require('express-validator')
 const formatter = require('../utils/validatorErrorFormatter')
+const { set } = require('mongoose')
 
 
 exports.signupGetController = (req, res, next) => {
@@ -61,10 +62,12 @@ exports.signupPostController = async (req, res, next) => {
 
 
 exports.loginGetController = (req, res, next) => {
+    console.log(req.session.isLoggedIn, req.session.user)
     res.render('pages/auth/login', {
         title: 'Login to Your Account',
         error: {}
     })
+    
 }
 
 
@@ -100,7 +103,8 @@ exports.loginPostController = async (req, res, next) => {
                 message: 'Invalid Credential'
             })
         }
-        console.log('Successfully Logged In', user)
+        req.session.isLoggedIn = true,
+        req.session.user = user
         res.render('pages/auth/login', {
             title: 'Login Your Account',
             error: {}

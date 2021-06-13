@@ -1,6 +1,14 @@
 const express = require('express')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
+const session = require('express-session')
+const MongoDBStore = require('connect-mongodb-session')(session)
+
+var store = new MongoDBStore({
+    uri: 'mongodb://localhost:27017/EXP-Blog',
+    collection: 'mySessions',
+    expires: 60*60*1000*4
+  })
 
 //import route
 
@@ -25,7 +33,14 @@ const middleware = [
     express.urlencoded({
         extended: true
     }),
-    express.json()
+    express.json(),
+    session({
+        secret: process.env.SECRET_KEY || 'SECRET_KEY',
+        resave: false,
+        saveUninitialized: false,
+        store: store    
+        
+   })
 ]
 
 app.use(middleware)
@@ -46,7 +61,7 @@ app.get('/', (req, res) => {
 
 let PORT = process.env.PORT || 8080 
 
-mongoose.connect('mongodb://localhost/EXP-Blog', {
+mongoose.connect('mongodb://localhost:27017/EXP-Blog', {
         useNewUrlParser: true,
         useUnifiedTopology: true
     })  
