@@ -4,21 +4,30 @@ const mongoose = require('mongoose')
 const session = require('express-session')
 const MongoDBStore = require('connect-mongodb-session')(session)
 
-var store = new MongoDBStore({
+//import route
+
+const authRoute = require('./routes/authRoute')
+const dashboardRoute = require('./routes/dashboardRoute')
+
+//import middleware
+
+const {bindUserWithRequest} = require('./middleware/authMiddleware')
+const setLocal = require('./middleware/setLocal')
+const { dashboardGetController } = require('./controllers/dashboardController')
+
+
+// const validatorRoute = require('./playground/validator')//must be delete later bcz its for practice validator
+
+const app = express()
+
+//session store system in mongodb
+
+const store = new MongoDBStore({
     uri: 'mongodb://localhost:27017/EXP-Blog',
     collection: 'mySessions',
     expires: 60*60*1000*4
   })
 
-//import route
-
-const authRoute = require('./routes/authRoute')
-
-// const validatorRoute = require('./playground/validator')//must be delete later bcz its for practice validator
-
-
-
-const app = express()
 
 //view engine setup
 
@@ -40,13 +49,16 @@ const middleware = [
         saveUninitialized: false,
         store: store    
         
-   })
+   }),
+   bindUserWithRequest(),
+   setLocal()
 ]
 
 app.use(middleware)
 
 
 app.use('/auth', authRoute)
+app.use('/dashboard', dashboardRoute)
 
 // app.use('/playground', validatorRoute)//must be delete later its for practice validator
 
@@ -72,4 +84,4 @@ mongoose.connect('mongodb://localhost:27017/EXP-Blog', {
     }).catch((err) => {
         console.log(err)
 
-    });
+    })
