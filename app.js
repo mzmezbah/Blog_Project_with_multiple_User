@@ -1,8 +1,11 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
 const session = require('express-session')
 const MongoDBStore = require('connect-mongodb-session')(session)
+const flash = require('connect-flash')
+const config = require('config')
 
 //import route
 
@@ -13,13 +16,14 @@ const dashboardRoute = require('./routes/dashboardRoute')
 
 const {bindUserWithRequest} = require('./middleware/authMiddleware')
 const setLocal = require('./middleware/setLocal')
-const { dashboardGetController } = require('./controllers/dashboardController')
 
 
 // const validatorRoute = require('./playground/validator')//must be delete later bcz its for practice validator
 
 const app = express()
 
+// console.log(app.get('env'))
+console.log(config.get('name'))
 //session store system in mongodb
 
 const store = new MongoDBStore({
@@ -51,7 +55,8 @@ const middleware = [
         
    }),
    bindUserWithRequest(),
-   setLocal()
+   setLocal(),
+   flash()
 ]
 
 app.use(middleware)
@@ -64,14 +69,12 @@ app.use('/dashboard', dashboardRoute)
 
 app.get('/', (req, res) => {
 
-    res.render('pages/auth/signup', {title: 'Create a new account'})
-    res.json({
-        message: 'Hello World!'
-    })
+    // res.render('pages/auth/signup', {title: 'Create a new account'})
+    res.redirect('/auth/signup')
 })
 
 
-let PORT = process.env.PORT || 8080 
+let PORT = process.env.PORT
 
 mongoose.connect('mongodb://localhost:27017/EXP-Blog', {
         useNewUrlParser: true,

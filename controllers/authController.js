@@ -5,16 +5,20 @@ const {
     validationResult
 } = require('express-validator')
 const formatter = require('../utils/validatorErrorFormatter')
+
 const {
     set
 } = require('mongoose')
+
+const Flash = require('../utils/Flash')
 
 
 exports.signupGetController = (req, res, next) => {
     res.render('pages/auth/signup', {
         title: 'Create A New Account',
         error: {},
-        value: {}
+        value: {},
+        flashMessage: Flash.getMessage(req)
     })
 }
 
@@ -27,7 +31,9 @@ exports.signupPostController = async (req, res, next) => {
     } = req.body
 
     let errors = validationResult(req).formatWith(formatter)
+
     if (!errors.isEmpty()) {
+        req.flash('fail', 'Please Check Your Form.')
         return res.render('pages/auth/signup', {
             title: 'Create A New Account',
             error: errors.mapped(),
@@ -35,7 +41,8 @@ exports.signupPostController = async (req, res, next) => {
                 username,
                 email,
                 password
-            }
+            },
+            flashMessage: Flash.getMessage(req)
         })
     }
     try {
@@ -47,14 +54,9 @@ exports.signupPostController = async (req, res, next) => {
             password: hashedPassword
         })
 
-        let createUser = await user.save()
-
-        console.log('Account Create Successfully', createUser)
-        res.render('pages/auth/signup', {
-            title: 'Create A New Account',
-            error: {},
-            value: {}
-        })
+        await user.save()
+        req.flash('success', 'User Created Successfully!')
+        res.redirect('/auth/login')
 
     } catch (e) {
         console.log(e)
@@ -64,10 +66,11 @@ exports.signupPostController = async (req, res, next) => {
 
 
 exports.loginGetController = (req, res, next) => {
-    console.log(req.session.isLoggedIn, req.session.user)
+   
     res.render('pages/auth/login', {
         title: 'Login to Your Account',
-        error: {}
+        error: {},
+        flashMessage: Flash.getMessage(req)
     })
 
 }
@@ -80,11 +83,15 @@ exports.loginPostController = async (req, res, next) => {
     } = req.body
 
     let errors = validationResult(req).formatWith(formatter)
+
     if (!errors.isEmpty()) {
+        req.flash('fail', 'Please Check Your Form.')
         console.log(errors)
         return res.render('pages/auth/login', {
             title: 'LogIn to Your Account',
-            error: errors.mapped()
+            error: errors.mapped(),
+            flashMessage: Flash.getMessage(req)
+
         })
     }
     // console.log(errors)
@@ -94,26 +101,36 @@ exports.loginPostController = async (req, res, next) => {
         })
 
         if (!user) {
-            return res.json({
-                message: 'Invalid Credential'
+            req.flash('fail', 'Provide Valid User ID.')
+            return res.render('pages/auth/login', {
+                title: 'LogIn to Your Account',
+                error: {},
+                flashMessage: Flash.getMessage(req)
+    
             })
         }
 
         let match = await bcrypt.compare(password, user.password)
         if (!match) {
-            res.json({
-                message: 'Invalid Credential'
+            req.flash('fail', 'Provide Valid User ID.')
+            return res.render('pages/auth/login', {
+                title: 'LogIn to Your Account',
+                error: {},
+                flashMessage: Flash.getMessage(req)
+    
             })
         }
         req.session.isLoggedIn = true,
-         req.session.user = user
-         req.session.save(err => {
-             if(err){
-                 console.log(err)
-                 return next(err)
-             }
+        req.session.user = user,
+
+        req.session.save(err => {
+            if (err) {
+                console.log(err)
+                return next(err)
+            }
+            req.flash('success', 'Successfully Logged In!')
             res.redirect('/dashboard')
-         })
+        })
 
         // res.render('pages/auth/login', {
         //     title: 'Login Your Account',
