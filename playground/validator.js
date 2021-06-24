@@ -7,6 +7,18 @@ const {
 
 const Flash = require('../utils/Flash')
 
+//import npm console system
+
+const testConsole = require('debug')('app:test')//this extra fn , you can use any text instead of app:test.
+
+const dbConsole = require('debug')('app:db')//you can set different console for easy to your code & debug..
+
+testConsole('hello, this console log is by using debug module')//its a console.log() but for showing this we need to set environment variable in our terminal like  for Powershell $env:DEBUG='app:test' for terminal set DEBUG='app:test'
+
+dbConsole('this console is for show error or something in database')//for showing this on console is same process..but if you can see all type of console of same name like 'app' then type shortcut for Powershell $env:DEBUG='app:*' for terminal set DEBUG='app:*'
+
+
+
 
 router.get('/validator', (req, res, next) => {
 
