@@ -25,7 +25,8 @@ router.get('/validator', (req, res, next) => {
     console.log(Flash.getMessage(req))
 
     res.render('./playground/signup', {
-        title: 'validate your data'
+        title: 'validate your data',
+        flashMessage: {}
     })
 })
 
