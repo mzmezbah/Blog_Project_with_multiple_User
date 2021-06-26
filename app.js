@@ -3,7 +3,6 @@ const express = require('express')
 const mongoose = require('mongoose')
 const config = require('config')
 
-
 //import route
 
 const setRoutes = require('./routes/routes')
@@ -11,10 +10,6 @@ const setRoutes = require('./routes/routes')
 //import middleware
 
 const setMiddleware = require('./middleware/middleware')
-
-//import practice route
-
-// const validatorRoute = require('./playground/validator')//must be delete later bcz its for practice validator
 
 const app = express()
 
@@ -34,9 +29,21 @@ setMiddleware(app)
 
 setRoutes(app)
 
-// app.use('/playground', validatorRoute)//must be delete later its for practice validator
+app.use((req, res, next) => {
+    let error = new Error('404 page not found')
+    error.status = 404
+    next(error)
+})
 
-
+app.use((error, req, res, next) => {
+    if (error.status == 404) {
+        return res.render('pages/error/404', {
+            flashMessage: {}
+        })
+    }
+    console.log(error)
+    res.render('pages/error/500', {flashMessage: {}})
+})
 
 let PORT = process.env.PORT
 

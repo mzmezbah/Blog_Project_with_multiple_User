@@ -30,7 +30,11 @@ let routes = [
 module.exports = (app) => {
     routes.forEach( r => {
         // console.log(r)
-        app.use(r.path, r.controllerName)
+        if(r.path === '/'){
+            app.get(r.path, r.controllerName)
+        }else{
+            app.use(r.path, r.controllerName)
+        }
     })
 }
 
