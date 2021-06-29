@@ -1,6 +1,6 @@
 const authRoute = require('./authRoute')
 const dashboardRoute = require('./dashboardRoute')
-// const validatorRoute = require('../playground/validator')
+const validatorRoute = require('../playground/play') //for practice
 
 
 let routes = [
@@ -12,10 +12,10 @@ let routes = [
         path:'/dashboard',
         controllerName: dashboardRoute
     },
-    // {
-    //     path: '/playground',
-    //     controllerName: validatorRoute
-    // },//just for practice
+    {
+        path: '/playground',
+        controllerName: validatorRoute
+    },//just for practice
     {
         path:'/',
         controllerName: (req, res) => {

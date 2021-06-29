@@ -4,10 +4,14 @@
     <div class="col-md-6 offset-md-3">
         <div class="card card-body">
             <h4 class="mb-3">Create A New Account</h4>
-            <form action="/playground/validator" method="post">
+            <form action="/playground/play" method="post" enctype="multipart/form-data">
                 <div class="form-group my-2">
                     <label for="username">Enter Your User Name (Must Be Uniq)</label>
                     <input type="text" name="username" id="username" class="form-control">
+                </div>
+                <div class="form-group my-2">
+                    <label >Choose Your File</label>
+                    <input type="file" name="my-file" class="form-control">
                 </div>
                 <div class="form-group my-2">
                     <label for="email">Enter Your Valid Email</label>
