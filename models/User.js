@@ -26,6 +26,10 @@ let userSchema = new Schema({
         //here type is a ObjectId of reference Schema  & ref is schema name which schema is linked here..
         type: Schema.Types.ObjectId,
         ref: 'Profile'
+    },
+    profilePics: {
+        type : String,
+        default: '/uploads/default.png'
     }
 }, {
     timestamps: true    
