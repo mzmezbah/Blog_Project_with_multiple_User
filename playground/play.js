@@ -24,7 +24,7 @@ router.get('/play', (req, res, next) => {
 
     console.log(Flash.getMessage(req))
 
-    res.render('./playground/play', {
+    res.render('./playground/playModal', {
         title: 'practice with data',
         flashMessage: {}
     })

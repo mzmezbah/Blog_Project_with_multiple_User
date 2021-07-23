@@ -29,10 +29,7 @@ window.onload = function () {
     $('#profilePicsFile').on('change', function (e) {
         if (this.files[0]) {
             readableFile(this.files[0])
-            $('#exampleModal').modal({
-                backdrop: 'static',
-                keyboard: false
-            })
+            $('#exampleModal').modal('show')
         }
     })
 
@@ -43,4 +40,40 @@ window.onload = function () {
             baseCropping.croppie('destroy')
         }, 1000)
     })
+
+    $('#upload-image').on('click', function() {
+        baseCropping.croppie('result', 'blob')
+            .then( blob=> {
+                let formData = new FormData()
+                let file = document.getElementById('profilePicsFile').files[0]
+                let name = generateFileName(file.name)
+                formData.append('profilePic', blob, name)
+
+                let headers = new Headers()
+                headers.append('Accept','Application/JSON')
+
+                let req = new Request('/uploads/profilePic' ,{
+                    method: 'POST',
+                    headers,
+                    mode: 'cors',
+                    body: formData
+                })
+                return fetch(req)
+            })
+            .then(res => res.json()).then(data=> {
+                document.getElementById('removeProfilePics').style.display = 'block'
+                document.getElementById('profilePics').src = data.profilePic
+                document.getElementById('profilePicsForm').reset()
+            })
+
+            $('#exampleModal').modal('hide')
+            setTimeout(()=> {
+                baseCropping.croppie('destroy')
+            },1000)
+    })
+}
+
+function generateFileName(name){
+    const types = /(.jpeg|.jpg|.png|.gif)/
+    return name.replace(types, '.png')
 }
