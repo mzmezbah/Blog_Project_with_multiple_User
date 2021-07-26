@@ -13,7 +13,7 @@ window.onload = function () {
 
     function readableFile(file) {
         let reader = new FileReader()
-        reader.onload = function(event) {
+        reader.onload = function (event) {
             baseCropping.croppie('bind', {
                 url: event.target.result
             }).then(() => {
@@ -21,7 +21,7 @@ window.onload = function () {
                     'min': 0.5000,
                     'max': 1.5000
                 })
-            }) 
+            })
         }
         reader.readAsDataURL(file)
     }
@@ -33,7 +33,7 @@ window.onload = function () {
         }
     })
 
-    
+
     $('#cancel-cropping').on('click', function () {
         $('#exampleModal').modal('hide')
         setTimeout(() => {
@@ -41,18 +41,18 @@ window.onload = function () {
         }, 1000)
     })
 
-    $('#upload-image').on('click', function() {
+    $('#upload-image').on('click', function () {
         baseCropping.croppie('result', 'blob')
-            .then( blob=> {
+            .then(blob => {
                 let formData = new FormData()
                 let file = document.getElementById('profilePicsFile').files[0]
                 let name = generateFileName(file.name)
                 formData.append('profilePic', blob, name)
 
                 let headers = new Headers()
-                headers.append('Accept','Application/JSON')
+                headers.append('Accept', 'Application/JSON')
 
-                let req = new Request('/uploads/profilePic' ,{
+                let req = new Request('/uploads/profilePic', {
                     method: 'POST',
                     headers,
                     mode: 'cors',
@@ -60,20 +60,44 @@ window.onload = function () {
                 })
                 return fetch(req)
             })
-            .then(res => res.json()).then(data=> {
+            .then(res => res.json())
+            .then(data => {
                 document.getElementById('removeProfilePics').style.display = 'block'
                 document.getElementById('profilePics').src = data.profilePic
                 document.getElementById('profilePicsForm').reset()
-            })
 
-            $('#exampleModal').modal('hide')
-            setTimeout(()=> {
-                baseCropping.croppie('destroy')
-            },1000)
+                $('#exampleModal').modal('hide')
+                setTimeout(() => {
+                    baseCropping.croppie('destroy')
+                }, 1000)
+            })
+            .catch(e => {
+                console.log(e)
+                alert('Server Error Occurred')
+            })
+    })
+
+    $('#removeProfilePics').on('click', function () {
+        let req = new Request('/uploads/profilePic', {
+            method: 'DELETE',
+            mode: 'cors'
+        })
+        fetch(req)
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('removeProfilePics').style.display = 'none'
+                document.getElementById('profilePics').src = data.profilePic
+                document.getElementById('profilePicsForm').reset()
+               
+            })
+            .catch(e => {
+                console.log(e)
+                alert('Server Error Occurred')
+            })
     })
 }
 
-function generateFileName(name){
+function generateFileName(name) {
     const types = /(.jpeg|.jpg|.png|.gif)/
     return name.replace(types, '.png')
 }

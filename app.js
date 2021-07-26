@@ -49,7 +49,8 @@ let PORT = process.env.PORT
 
 mongoose.connect('mongodb://localhost:27017/EXP-Blog', {
         useNewUrlParser: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
+        useFindAndModify: false
     })
     .then((result) => {
         app.listen(PORT, () => {

@@ -7,11 +7,14 @@ const {
 const upload = require('../middleware/uploadMiddleware')
 
 const {
-    uploadProfilePic
+    uploadProfilePic,
+    removeProfilePic
 } = require('../controllers/uploadController')
 
 
 router.post('/profilePic', isAuthenticated, upload.single('profilePic'), uploadProfilePic)
+
+router.delete('/profilePic', isAuthenticated, removeProfilePic)
 
 
 
