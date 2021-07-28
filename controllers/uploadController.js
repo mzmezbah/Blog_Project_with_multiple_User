@@ -6,6 +6,7 @@ exports.uploadProfilePic = async (req, res, next) => {
 
     if (req.file) {
         try {
+            let oldProfilePic = req.user.profilePic
             let profile = await Profile.findOne({
                 user: req.user._id
             })
@@ -28,6 +29,14 @@ exports.uploadProfilePic = async (req, res, next) => {
                     profilePic
                 }
             })
+
+            if(oldProfilePic !== '/uploads/default.png'){
+                fs.unlink(`public${oldProfilePic}`, err => {
+                    if(err){
+                        console.log(err)
+                    }
+                })
+            }
             res.status(200).json({
                 profilePic
             })

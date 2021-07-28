@@ -36,9 +36,6 @@ window.onload = function () {
 
     $('#cancel-cropping').on('click', function () {
         $('#exampleModal').modal('hide')
-        setTimeout(() => {
-            baseCropping.croppie('destroy')
-        }, 1000)
     })
 
     $('#upload-image').on('click', function () {
@@ -67,9 +64,6 @@ window.onload = function () {
                 document.getElementById('profilePicsForm').reset()
 
                 $('#exampleModal').modal('hide')
-                setTimeout(() => {
-                    baseCropping.croppie('destroy')
-                }, 1000)
             })
             .catch(e => {
                 console.log(e)
