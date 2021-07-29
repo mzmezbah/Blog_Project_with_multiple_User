@@ -2,15 +2,15 @@ const authRoute = require('./authRoute')
 const dashboardRoute = require('./dashboardRoute')
 const uploadRoute = require('./uploadRoutes')
 const validatorRoute = require('../playground/play') //for practice
+const postRoute = require('./postRoute')
 
 
-let routes = [
-    {
-        path:'/auth',
+let routes = [{
+        path: '/auth',
         controllerName: authRoute
     },
     {
-        path:'/dashboard',
+        path: '/dashboard',
         controllerName: dashboardRoute
     },
     {
@@ -18,11 +18,15 @@ let routes = [
         controllerName: uploadRoute
     },
     {
+        path: '/posts',
+        controllerName: postRoute
+    },
+    {
         path: '/playground',
         controllerName: validatorRoute
-    },//just for practice
+    }, //just for practice
     {
-        path:'/',
+        path: '/',
         controllerName: (req, res) => {
 
             // res.render('pages/auth/signup', {title: 'Create a new account'})
@@ -33,13 +37,12 @@ let routes = [
 ]
 
 module.exports = (app) => {
-    routes.forEach( r => {
+    routes.forEach(r => {
         // console.log(r)
-        if(r.path === '/'){
+        if (r.path === '/') {
             app.get(r.path, r.controllerName)
-        }else{
+        } else {
             app.use(r.path, r.controllerName)
         }
     })
 }
-
