@@ -94,3 +94,16 @@ exports.removeProfilePic = (req, res, next) => {
         })
     }
 }
+
+exports.postImageUploadController  = (req,res,next) => {
+    console.log(req.file)
+    if(req.file)
+    return res.status(200).json({
+        imageUrl: `/uploads/${req.file.filename}`
+    })
+    
+
+    return res.status(500).json({
+        message: 'SERVER ERROR'
+    })
+}
