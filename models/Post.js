@@ -14,10 +14,11 @@ const postSchema = new Schema({
         type: String,
         trim: true,
         required: true,
-        maxlength: 200
+        maxlength: 100
     },
     body: {
         type: String,
+        maxlength: 5000,
         required: true
     },
     author: {

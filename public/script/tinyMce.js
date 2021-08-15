@@ -13,9 +13,9 @@ window.onload = function () {
     automatic_uploads: true,
     images_upload_url: '/uploads/postImage',
     images_upload_handler: function (blobInfo, success, failure) {
-
       let headers = new Headers()
       headers.append('Accept', 'Application/JSON')
+
 
       let formData = new FormData()
       formData.append('post-image', blobInfo.blob(), blobInfo.filename())
@@ -33,4 +33,9 @@ window.onload = function () {
         .catch(() => failure('HTTP Error'))
     }
 })
+}
+
+function generateFileName(name) {
+  const types = /(.jpeg|.jpg|.png|.gif)/
+  return name.replace(types, '.png')
 }

@@ -55,7 +55,6 @@ window.onload = function () {
                     mode: 'cors',
                     body: formData
                 })
-                console.log(req)
                 return fetch(req)
             })
             .then(res => res.json())
