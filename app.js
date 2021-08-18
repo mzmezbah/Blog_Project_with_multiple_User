@@ -45,7 +45,7 @@ app.use((error, req, res, next) => {
     res.render('pages/error/500', {flashMessage: {}})
 })
 
-let PORT = process.env.PORT
+let PORT = process.env.PORT || 8080
 
 mongoose.connect('mongodb://localhost:27017/EXP-Blog', {
         useNewUrlParser: true,
