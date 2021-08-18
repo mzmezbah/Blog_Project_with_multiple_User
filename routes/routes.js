@@ -4,6 +4,8 @@ const uploadRoute = require('./uploadRoutes')
 const validatorRoute = require('../playground/play') //for practice
 const postRoute = require('./postRoute')
 
+const apiRoute = require('../api/routes/apiRoute')
+
 
 let routes = [{
         path: '/auth',
@@ -20,6 +22,10 @@ let routes = [{
     {
         path: '/posts',
         controllerName: postRoute
+    },
+    {
+        path: '/api',
+        controllerName: apiRoute
     },
     {
         path: '/playground',
