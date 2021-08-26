@@ -5,7 +5,7 @@ exports.likesGetController = async (req, res, next) => {
         postId
     } = req.body
     let liked = null
-   
+
 
     if (!req.user) {
         res.status(403).json({
@@ -63,12 +63,11 @@ exports.likesGetController = async (req, res, next) => {
     }
 }
 
-exports.dislikesGetController = (req, res, next) => {
+exports.dislikesGetController = async(req, res, next) => {
     let {
         postId
     } = req.params
     let disliked = null
-    let userId = req.user._id
 
     if (!req.user) {
         return res.status(403).json({

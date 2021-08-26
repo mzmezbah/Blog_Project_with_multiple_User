@@ -26,16 +26,10 @@ window.onload = function () {
         mode: 'cors',
         body: formData
       })
-      console.log(req)
      fetch(req)
         .then(res => res.json())
         .then(data => success(data.imageUrl))
         .catch(() => failure('HTTP Error'))
     }
 })
-}
-
-function generateFileName(name) {
-  const types = /(.jpeg|.jpg|.png|.gif)/
-  return name.replace(types, '.png')
 }

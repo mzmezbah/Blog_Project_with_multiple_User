@@ -11,8 +11,9 @@ exports.bookmarksGetController = async (req, res, next) => {
         })
     }
 
-    let bookmark = null
+    
     let userId = req.user._id
+    let bookmark = null
 
     try {
         let profile = await Profile.findOne({
@@ -26,14 +27,14 @@ exports.bookmarksGetController = async (req, res, next) => {
                 $pull: {
                     'bookmarks': postId
                 }
-            })
+            }) 
             bookmark = false
         } else {
             await Profile.findOneAndUpdate({
                 user: userId
             }, {
                 $push: {
-                    'bookmark': postId
+                    'bookmarks': postId
                 }
             })
             bookmark = true

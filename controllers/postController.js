@@ -7,7 +7,6 @@ const readingTime = require('reading-time')
 
 let Post = require('../models/Post')
 let Profile = require('../models/Profile')
-const { next } = require('cheerio/lib/api/traversing')
 
 exports.createPostGetController = (req, res, next) => {
     return res.render('pages/dashboard/post/create-post', {
