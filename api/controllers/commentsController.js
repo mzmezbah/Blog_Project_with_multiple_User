@@ -25,7 +25,7 @@ exports.commentPostController = async (req, res, next) => {
 
         let createdComment = await comment.save()
         await Post.findOneAndUpdate({
-            _id: createdComment._id
+            _id: postId
         }, {
             $push: {
                 'comments': createdComment._id

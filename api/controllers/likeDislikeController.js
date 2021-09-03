@@ -3,7 +3,7 @@ const Post = require('../../models/Post')
 exports.likesGetController = async (req, res, next) => {
     let {
         postId
-    } = req.body
+    } = req.params
     let liked = null
 
 
@@ -18,7 +18,7 @@ exports.likesGetController = async (req, res, next) => {
     try {
         let post = await Post.findById(postId)
 
-        if (post.dislike.includes(userId)) {
+        if (post.dislikes.includes(userId)) {
             await Post.findOneAndUpdate({
                 _id: postId
             }, {
@@ -35,7 +35,7 @@ exports.likesGetController = async (req, res, next) => {
                     'likes': userId
                 }
             })
-            liked: false
+            liked = false
         } else {
             await Post.findOneAndUpdate({
                 _id: postId
@@ -44,7 +44,7 @@ exports.likesGetController = async (req, res, next) => {
                     'likes': userId
                 }
             })
-            liked: true
+            liked = true
         }
 
         let updatedPost = await Post.findById(postId)
@@ -53,7 +53,6 @@ exports.likesGetController = async (req, res, next) => {
             liked,
             totalLikes: updatedPost.likes.length,
             totalDislikes: updatedPost.dislikes.length
-
         })
     } catch (e) {
         console.log(e)
@@ -89,7 +88,7 @@ exports.dislikesGetController = async(req, res, next) => {
             })
         }
 
-        if (post.dislikes.includes(postId)) {
+        if (post.dislikes.includes(userId)) {
             await Post.findOneAndUpdate({
                 _id: postId
             }, {
@@ -97,7 +96,7 @@ exports.dislikesGetController = async(req, res, next) => {
                     'dislikes': userId
                 }
             })
-            disliked: false
+            disliked = false
         } else {
             await Post.findOneAndUpdate({
                 _id: postId
@@ -106,7 +105,7 @@ exports.dislikesGetController = async(req, res, next) => {
                     'dislikes': userId
                 }
             })
-            disliked: true
+            disliked = true
         }
 
         let updatedPost = await Post.findById(postId)
