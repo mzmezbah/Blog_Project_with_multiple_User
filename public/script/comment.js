@@ -1,10 +1,11 @@
+
 window.onload = function () {
 
     let comment = document.getElementById('comment')
     let commentHolder = document.getElementById('comment-holder')
 
     comment.addEventListener('keypress', function (e) {
-
+ 
         if (e.key == 'Enter') {
             if (e.target.value) {
                 let postId = comment.dataset.post
@@ -31,6 +32,33 @@ window.onload = function () {
 
     })
 
+    commentHolder.addEventListener('keypress', (e) => {
+        if(commentHolder.hasChildNodes(e.target)){
+            if(e.key == 'Enter'){
+                let commentId = e.target.dataset.comment
+                let value = e.target.value
+                if(value){
+                    let data = {
+                        body: value
+                    }
+                    generateRequest(`/api/comment/replies/${commentId}`,'POST', data)
+                        .then(res => res.json())
+                        .then( data => {
+                            let replyElement = createReplyElement(data)
+                            let parent = e.target.parentElement
+                            parent.previousElementSibling.appendChild(replyElement)
+                            e.target.value = ''
+                        })
+                        .catch(e => {
+                            console.log(e)
+                            alert(e.message)
+                        })
+                }else{
+                    alert('Enter a valid Reply')
+                }
+            }
+        }
+    })
 
 
 }
@@ -52,6 +80,18 @@ function createComment(comment) {
     return div
 }
 
+function createReplyElement(reply) {
+    let innerHTML = `<img src="${reply.profilePic}" class="rounded-circle mx-3 my-3" style="width: 40px;">
+    <div class="media-body">
+        <p>${reply.body}</p>
+    </div>`
+
+    let div = document.createElement('div')
+    div.className = 'media mt-3'
+    div.innerHTML = innerHTML
+    return div
+}
+
 
 function generateRequest(url, method, body) {
     let headers = new Headers()
@@ -66,4 +106,5 @@ function generateRequest(url, method, body) {
     })
 
     return fetch(req)
+
 }

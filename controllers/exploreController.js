@@ -42,7 +42,6 @@ function generateFilterObject(filter) {
     }
 }
 
-
 exports.exploreGetController = async (req, res, next) => {
     let filter = req.query.filter || 'latest'
     let currentPage = parseInt(req.query.page) || 1

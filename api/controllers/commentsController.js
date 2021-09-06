@@ -81,7 +81,6 @@ exports.replyCommentPostController = async (req, res, next) => {
             profilePic: req.user.profilePic
         })
 
-
     } catch (e) {
         console.log(e)
         res.status(500).json({

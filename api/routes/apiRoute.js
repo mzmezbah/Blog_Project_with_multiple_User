@@ -19,7 +19,7 @@ const {
 
 router.post('/comment/:postId', isAuthenticated, commentPostController)
 
-router.post('comment/replies/:commentId', isAuthenticated, replyCommentPostController)
+router.post('/comment/replies/:commentId', isAuthenticated, replyCommentPostController)
 
 router.get('/likes/:postId', isAuthenticated, likesGetController)
 
