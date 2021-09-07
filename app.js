@@ -50,7 +50,8 @@ let PORT = process.env.PORT || 8080
 mongoose.connect('mongodb://localhost:27017/EXP-Blog', {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        useFindAndModify: false
+        useFindAndModify: false,
+        useCreateIndex: true 
     })
     .then((result) => {
         app.listen(PORT, () => {
