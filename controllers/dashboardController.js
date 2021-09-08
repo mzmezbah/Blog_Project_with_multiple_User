@@ -5,7 +5,6 @@ const errorFormatter = require('../utils/validatorErrorFormatter')
 const Flash = require('../utils/Flash')
 const User = require('../models/User')
 const Profile = require('../models/Profile')
-const { ResultWithContext } = require('express-validator/src/chain')
 
 exports.dashboardGetController = async (req, res, next) => {
 
@@ -193,6 +192,24 @@ exports.editProfilePostController = async (req, res, next) => {
     } catch (e) {
         next(e)
     }   
+}
 
 
+exports.bookmarksGetController = async (req,res,next) => {
+    try {
+        let profile = await Profile.findOne({user: req.user._id})
+                .populate({
+                    path: 'bookmarks',
+                    // model: 'Post',
+                    select: 'title thumbnail'
+                })
+                console.log(profile.bookmarks)
+        res.render('pages/dashboard/bookmark',{
+            title: 'My Bookmarks',
+            flashMessage: Flash.getMessage(req),
+            posts: profile.bookmarks
+        })
+    } catch (e) {
+        next(e)
+    }
 }
