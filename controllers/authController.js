@@ -65,7 +65,7 @@ exports.signupPostController = async (req, res, next) => {
 
 
 exports.loginGetController = (req, res, next) => {
-   
+
     res.render('pages/auth/login', {
         title: 'Login to Your Account',
         error: {},
@@ -105,7 +105,7 @@ exports.loginPostController = async (req, res, next) => {
                 title: 'LogIn to Your Account',
                 error: {},
                 flashMessage: Flash.getMessage(req)
-    
+
             })
         }
 
@@ -116,20 +116,20 @@ exports.loginPostController = async (req, res, next) => {
                 title: 'LogIn to Your Account',
                 error: {},
                 flashMessage: Flash.getMessage(req)
-    
+
             })
         }
         req.session.isLoggedIn = true,
-        req.session.user = user,
+            req.session.user = user,
 
-        req.session.save(err => {
-            if (err) {
-                console.log(err)
-                return next(err)
-            }
-            req.flash('success', 'Successfully Logged In!')
-            res.redirect('/dashboard')
-        })
+            req.session.save(err => {
+                if (err) {
+                    console.log(err)
+                    return next(err)
+                }
+                req.flash('success', 'Successfully Logged In!')
+                res.redirect('/dashboard')
+            })
 
         // res.render('pages/auth/login', {
         //     title: 'Login Your Account',
@@ -148,4 +148,62 @@ exports.logoutController = (req, res, next) => {
         }
         return res.redirect('/auth/login')
     })
+}
+
+
+exports.changePassGetController = (req, res, next) => {
+    res.render('pages/auth/changePassword', {
+        title: 'Change Your Password',
+        flashMessage: Flash.getMessage(req),
+        error: {}
+    })
+}
+
+
+exports.changePassPostController = async (req, res, next) => {
+    let {
+        oldPassword,
+        newPassword,
+        confirmPassword
+    } = req.body
+
+    let errors = validationResult(req).formatWith(formatter)
+
+    if (!errors.isEmpty()) {
+        req.flash('fail', 'Please Input a Valid Password')
+        return res.render('pages/auth/changePassword', {
+            title: 'Change Your Password',
+            error: errors.mapped(),
+            flashMessage: Flash.getMessage(req)
+        })
+    }
+
+    if (newPassword !== confirmPassword) {
+        req.flash('fail', 'Password does not Match')
+       return res.redirect('/auth/changePassword')
+    }
+
+    try {
+
+        let match = await bcrypt.compare(oldPassword, req.user.password)
+        if (!match) {
+            req.flash('fail', 'Invalid Old Password')
+            res.redirect('/auth/changePassword')
+        }
+
+        let hash = await bcrypt.hash(newPassword, 11)
+
+        await User.findOneAndUpdate({
+            _id: req.user._id
+        }, {
+            $set: {
+                password: hash
+            }
+        })
+        req.flash('success', 'Password Updated Successfully!')
+        return res.redirect('/auth/changePassword')
+    } catch (e) {
+        next(e)
+    }
+
 }

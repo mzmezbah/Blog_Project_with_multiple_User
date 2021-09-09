@@ -5,6 +5,7 @@ const errorFormatter = require('../utils/validatorErrorFormatter')
 const Flash = require('../utils/Flash')
 const User = require('../models/User')
 const Profile = require('../models/Profile')
+const Comment = require('../models/Comment')
 
 exports.dashboardGetController = async (req, res, next) => {
 
@@ -209,6 +210,36 @@ exports.bookmarksGetController = async (req,res,next) => {
             flashMessage: Flash.getMessage(req),
             posts: profile.bookmarks
         })
+    } catch (e) {
+        next(e)
+    }
+}
+
+
+exports.commentGetController = async (req,res,next) => {
+
+    try {
+        let profile = await Profile.findOne({user: req.user._id})
+        let comments = await Comment.find({post: {$in: profile.post}})
+                .populate({
+                    path: 'post',
+                    select: 'title'
+                })
+                .populate({
+                    path: 'user',
+                    select: 'username profilePic'
+                })
+                .populate({
+                    path: 'replies.user',
+                    select: 'username profilePic'
+                })
+
+        res.render('pages/dashboard/comments', {
+            title: 'Your Posts Comments',
+            flashMessage: Flash.getMessage(req),
+            comments
+        })
+
     } catch (e) {
         next(e)
     }
