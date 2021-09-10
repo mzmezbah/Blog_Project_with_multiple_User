@@ -49,9 +49,7 @@ let routes = [{
     {
         path: '/',
         controllerName: (req, res) => {
-
-            // res.render('pages/auth/signup', {title: 'Create a new account'})
-            res.redirect('/auth/signup')
+            res.redirect('/explore')
         }
     }
 

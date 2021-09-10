@@ -3,18 +3,18 @@
 <div class="container my-3">
   <div class="row">
     <div class="col-md-8 offset-md-3">
-      <div class="card card-body" >
+      <div class="card card-body">
         <div>
           <img src="<%= author.profilePic %>" class="img-fluid img-thumbnail">
         </div>
         <div>
-         <p> Name: <strong> <%= author.profile.name %></strong></p>
+          <p> Name: <strong> <%= author.profile.name %></strong></p>
           <p>Title: <strong><%= author.profile.title %></strong></p>
           <p> Bio:<%= author.profile.bio %></p>
           <div>
-            Social Links:  
+            Social Links:
             <% if(author.profile.link.website){ %>
-            <span>
+            <span style="margin-left: 3px;">
               <a href="<%= author.profile.link.website %>" target="_blank">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
                   class="bi bi-link-45deg" viewBox="0 0 16 16">
@@ -28,7 +28,7 @@
             <% } %>
 
             <% if(author.profile.link.facebook){ %>
-            <span>
+            <span style="margin-left: 3px;">
               <a href="<%= author.profile.link.facebook %>" target="_blank">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
                   class="bi bi-facebook" viewBox="0 0 16 16">
@@ -40,7 +40,7 @@
             <% } %>
 
             <% if(author.profile.link.twitter){ %>
-            <span>
+            <span style="margin-left: 3px;">
               <a href="<%= author.profile.link.twitter %>" target="_blank">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter"
                   viewBox="0 0 16 16">
@@ -64,38 +64,33 @@
             </span>
             <% } %>
 
-            <div>
-
-              
-            </div>
-
           </div>
         </div>
       </div>
-        <div class=" card-body card  my-3">
-          <h5 class="my-2"><strong>Post of <%= author.username %></strong></h5>
-          <div class="row">
-              <% if(posts.length == 0) {%>
+      <div class=" card-body card  my-3">
+        <h5 class="my-2"><strong>Post of <%= author.username %></strong></h5>
+        <div class="row">
+          <% if(posts.length == 0) {%>
 
-               <div class="text-center text-muted">
-                   <p>Post are Not Available to Show</p>
-               </div>
-
-              <% } else { %>
-               <% for (let post of posts.reverse()){ %>
-                   <div class="card col-sm-3 m-3">
-                       <% if(post.thumbnail){ %>
-                           <img src="<%= post.thumbnail %>" alt="<%= post.title %>" class="card-img-top mt-3">
-                       <% }%>
-                       <div class="card-body">
-                           <a href="/explore/<%= post._id %>" style="color: #222";>
-                               <h5><%= post.title %></h5>
-                           </a>
-                       </div>   
-                   </div>
-               <% } %>
-              <% } %>
+          <div class="text-center text-muted">
+            <p>Post are Not Available to Show</p>
           </div>
+
+          <% } else { %>
+          <% for (let post of posts.reverse()){ %>
+          <div class="card col-sm-3 m-3">
+            <% if(post.thumbnail){ %>
+            <img src="<%= post.thumbnail %>" alt="<%= post.title %>" class="card-img-top mt-3">
+            <% }%>
+            <div class="card-body">
+              <a href="/explore/<%= post._id %>" style="color: #222" ;>
+                <h5><%= post.title %></h5>
+              </a>
+            </div>
+          </div>
+          <% } %>
+          <% } %>
+        </div>
       </div>
     </div>
   </div>

@@ -11,13 +11,23 @@ exports.dashboardGetController = async (req, res, next) => {
 
     try {
         let profile = await Profile.findOne({
-            user: req.user._id
-        })
+                user: req.user._id
+            })
+            .populate({
+                path: 'post',
+                select: 'title thumbnail'
+            })
+            .populate({
+                path: 'bookmarks',
+                select: 'title thumbnail'
+            })
 
         if (profile) {
             return res.render('pages/dashboard/dashboard', {
                 title: 'MY Dashboard',
-                flashMessage: Flash.getMessage(req)
+                flashMessage: Flash.getMessage(req),
+                posts: profile.post.reverse().slice(0, 5),
+                bookmarks: profile.bookmarks.reverse().slice(0, 5)
             })
         }
 
@@ -161,7 +171,7 @@ exports.editProfilePostController = async (req, res, next) => {
         })
 
     }
-    
+
     try {
         let profile = {
             name,
@@ -192,20 +202,22 @@ exports.editProfilePostController = async (req, res, next) => {
         })
     } catch (e) {
         next(e)
-    }   
+    }
 }
 
 
-exports.bookmarksGetController = async (req,res,next) => {
+exports.bookmarksGetController = async (req, res, next) => {
     try {
-        let profile = await Profile.findOne({user: req.user._id})
-                .populate({
-                    path: 'bookmarks',
-                    // model: 'Post',
-                    select: 'title thumbnail'
-                })
-                console.log(profile.bookmarks)
-        res.render('pages/dashboard/bookmark',{
+        let profile = await Profile.findOne({
+                user: req.user._id
+            })
+            .populate({
+                path: 'bookmarks',
+                // model: 'Post',
+                select: 'title thumbnail'
+            })
+        console.log(profile.bookmarks)
+        res.render('pages/dashboard/bookmark', {
             title: 'My Bookmarks',
             flashMessage: Flash.getMessage(req),
             posts: profile.bookmarks
@@ -216,23 +228,29 @@ exports.bookmarksGetController = async (req,res,next) => {
 }
 
 
-exports.commentGetController = async (req,res,next) => {
+exports.commentGetController = async (req, res, next) => {
 
     try {
-        let profile = await Profile.findOne({user: req.user._id})
-        let comments = await Comment.find({post: {$in: profile.post}})
-                .populate({
-                    path: 'post',
-                    select: 'title'
-                })
-                .populate({
-                    path: 'user',
-                    select: 'username profilePic'
-                })
-                .populate({
-                    path: 'replies.user',
-                    select: 'username profilePic'
-                })
+        let profile = await Profile.findOne({
+            user: req.user._id
+        })
+        let comments = await Comment.find({
+                post: {
+                    $in: profile.post
+                }
+            })
+            .populate({
+                path: 'post',
+                select: 'title'
+            })
+            .populate({
+                path: 'user',
+                select: 'username profilePic'
+            })
+            .populate({
+                path: 'replies.user',
+                select: 'username profilePic'
+            })
 
         res.render('pages/dashboard/comments', {
             title: 'Your Posts Comments',
